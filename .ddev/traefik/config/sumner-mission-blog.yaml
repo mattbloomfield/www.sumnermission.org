@@ -1,0 +1,104 @@
+#ddev-generated
+# If you remove the ddev-generated line above you
+# are responsible for maintaining this file. DDEV will not then
+# update it, for example if you add `additional_hostnames`, etc.
+
+http:
+  routers:
+    sumner-mission-blog-xhgui-80-http:
+      entrypoints:
+        - http-8143
+      rule: HostRegexp(`^sumner-mission-blog\.ddev\.site$`)
+      
+      service: "sumner-mission-blog-xhgui-80"
+      ruleSyntax: v3
+      tls: false
+      # middlewares:
+      #   - "sumner-mission-blog-redirectHttps"
+    sumner-mission-blog-web-80-http:
+      entrypoints:
+        - http-80
+      rule: HostRegexp(`^sumner-mission-blog\.ddev\.site$`)
+      
+      service: "sumner-mission-blog-web-80"
+      ruleSyntax: v3
+      tls: false
+      # middlewares:
+      #   - "sumner-mission-blog-redirectHttps"
+    sumner-mission-blog-web-8025-http:
+      entrypoints:
+        - http-8025
+      rule: HostRegexp(`^sumner-mission-blog\.ddev\.site$`)
+      
+      service: "sumner-mission-blog-web-8025"
+      ruleSyntax: v3
+      tls: false
+      # middlewares:
+      #   - "sumner-mission-blog-redirectHttps"
+    
+    
+    sumner-mission-blog-xhgui-80-https:
+      entrypoints:
+        - http-8142
+      rule: HostRegexp(`^sumner-mission-blog\.ddev\.site$`)
+      
+      service: "sumner-mission-blog-xhgui-80"
+      ruleSyntax: v3
+      
+      tls: true
+      
+    
+    
+    sumner-mission-blog-web-80-https:
+      entrypoints:
+        - http-443
+      rule: HostRegexp(`^sumner-mission-blog\.ddev\.site$`)
+      
+      service: "sumner-mission-blog-web-80"
+      ruleSyntax: v3
+      
+      tls: true
+      
+    sumner-mission-blog-web-8025-https:
+      entrypoints:
+        - http-8026
+      rule: HostRegexp(`^sumner-mission-blog\.ddev\.site$`)
+      
+      service: "sumner-mission-blog-web-8025"
+      ruleSyntax: v3
+      
+      tls: true
+      
+    
+
+  middlewares:
+    sumner-mission-blog-redirectHttps:
+      redirectScheme:
+        scheme: https
+        permanent: true
+
+  services:
+    sumner-mission-blog-xhgui-80:
+      loadbalancer:
+        servers:
+          - url: http://ddev-sumner-mission-blog-xhgui:80
+        
+    
+    sumner-mission-blog-web-80:
+      loadbalancer:
+        servers:
+          - url: http://ddev-sumner-mission-blog-web:80
+        
+    sumner-mission-blog-web-8025:
+      loadbalancer:
+        servers:
+          - url: http://ddev-sumner-mission-blog-web:8025
+        
+    
+    
+    
+
+tls:
+  certificates:
+    - certFile: /mnt/ddev-global-cache/traefik/certs/sumner-mission-blog.crt
+      keyFile: /mnt/ddev-global-cache/traefik/certs/sumner-mission-blog.key

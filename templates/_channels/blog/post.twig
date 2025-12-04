@@ -2,12 +2,14 @@
 
 {% block title %}{{ entry.title ~ ' - ' ~ siteName }}- {% endblock %}
 
+{% set featuredImage = entry.featuredImage.one() %}
+
 {% block jsonld %}
     <script type="application/ld+json">
         { "@context": "https://schema.org",
             "@type": "BlogPosting",
             "headline": "{{ entry.title }}",
-            "image": "{{ entry.featuredImage ?? '' }}",
+            "image": "{{ featuredImage.url ?? '' }}",
             "genre": "religious service",
             "keywords": "mission, service, help, people, lds, caribbean, virgin islands, espanola, st. thomas, st. john",
             "wordcount": "1120",
@@ -75,7 +77,6 @@
         </header>
 
         <!-- Featured Image -->
-        {% set featuredImage = entry.featuredImage.one() %}
         {% if featuredImage %}
             <figure class="mb-12 -mx-8 md:-mx-12">
                 <div class="aspect-video md:aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl">
