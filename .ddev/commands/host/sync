@@ -1,45 +1,34 @@
 #!/bin/bash
 
-# Color definitions
+## Description: Sync production database and assets to local DDEV
+
+set -e
+
+RED='\033[0;31m'
 YELLOW='\033[1;33m'
 BLUE='\033[1;34m'
-RESET='\033[0m' # No Color
+RESET='\033[0m'
 
-# Database configuration - set these variables
-DB_USER="root"
-DB_PASSWORD="Jenmatt2013"
 DB_NAME="sumner_mission_blog"
-REMOTE_HOST="66.220.24.250"
+DB_USER="sumnermissionblog"
+DB_PASSWORD="Y24a!exJ*9s4rv*yUTQb"
+REMOTE_HOST="mlj.one"
 REMOTE_DIR="/var/www/sumnermission.org/web"
 
-# Enable color output
 echo -e "${YELLOW}Exporting remote database...${RESET}"
+ssh matt@${REMOTE_HOST} "mysqldump -u ${DB_USER} -p'${DB_PASSWORD}' ${DB_NAME} > /tmp/sumner_sync.sql"
 
-# Export database with proper variable usage
-ssh root@${REMOTE_HOST} "mysqldump -u ${DB_USER} -p${DB_PASSWORD} ${DB_NAME} > /tmp/latest_backup.sql"
+echo -e "${YELLOW}Downloading database...${RESET}"
+scp matt@${REMOTE_HOST}:/tmp/sumner_sync.sql /tmp/sumner_sync.sql
 
-# Check if export was successful
-if [ $? -eq 0 ]; then
-    echo -e "${YELLOW}Downloading database...${RESET}"
-    scp root@${REMOTE_HOST}:/tmp/latest_backup.sql ./
+echo -e "${YELLOW}Importing to DDEV...${RESET}"
+ddev import-db --file=/tmp/sumner_sync.sql
 
-    if [ $? -eq 0 ]; then
-        echo -e "${YELLOW}Importing to DDEV...${RESET}"
-        ddev import-db --file=latest_backup.sql
+echo -e "${YELLOW}Cleaning up...${RESET}"
+ssh matt@${REMOTE_HOST} "rm /tmp/sumner_sync.sql"
+rm /tmp/sumner_sync.sql
 
-        echo -e "${YELLOW}Cleaning up...${RESET}"
-        ssh root@${REMOTE_HOST} "rm /tmp/latest_backup.sql"
-        rm latest_backup.sql
+echo -e "${YELLOW}Syncing images...${RESET}"
+rsync -avz --progress matt@${REMOTE_HOST}:${REMOTE_DIR}/images/ ./web/images/
 
-        echo -e "${BLUE}Database sync complete!${RESET}"
-    else
-        echo -e "${RED}Failed to download database backup${RESET}"
-        exit 1
-    fi
-else
-    echo -e "${RED}Failed to export remote database${RESET}"
-    exit 1
-fi
-
-echo -e "${YELLOW}Syncing files...${NC}"
-rsync -avz --progress root@${REMOTE_HOST}:$REMOTE_DIR/images/ ./web/images/
+echo -e "${BLUE}Sync complete!${RESET}"
