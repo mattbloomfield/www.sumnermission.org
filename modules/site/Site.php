@@ -6,15 +6,16 @@ use Craft;
 use craft\base\Element;
 use craft\base\Event;
 use craft\elements\Entry;
-use craft\errors\InvalidFieldException;
-use craft\events\ElementEvent;
+use craft\events\DefineHtmlEvent;
 use craft\events\ModelEvent;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\helpers\ElementHelper;
-use craft\mail\Message;
+use craft\log\MonologTarget;
 use craft\web\View;
 use modules\site\helpers\MailNotificationHelper;
-use yii\base\InvalidConfigException;
+use modules\site\helpers\NotificationLog;
+use Monolog\Formatter\LineFormatter;
+use Psr\Log\LogLevel;
 use yii\base\Module as BaseModule;
 
 /**
@@ -37,6 +38,7 @@ class Site extends BaseModule
 
         parent::init();
 
+        $this->registerNotificationLogTarget();
         $this->attachEventHandlers();
 
         // Any code that creates an element query or loads Twig should be deferred until
@@ -44,6 +46,26 @@ class Site extends BaseModule
         Craft::$app->onInit(function() {
             // ...
         });
+    }
+
+    /**
+     * Writes everything logged under the `blog-notifications` category to
+     * storage/logs/blog-notifications-*.log, including info-level messages,
+     * which Craft otherwise drops in production.
+     */
+    private function registerNotificationLogTarget(): void
+    {
+        Craft::getLogger()->dispatcher->targets[MailNotificationHelper::LOG_CATEGORY] = new MonologTarget([
+            'name' => MailNotificationHelper::LOG_CATEGORY,
+            'categories' => [MailNotificationHelper::LOG_CATEGORY],
+            'level' => LogLevel::INFO,
+            'logContext' => false,
+            'allowLineBreaks' => false,
+            'formatter' => new LineFormatter(
+                format: "%datetime% [%level_name%] %message%\n",
+                dateFormat: 'Y-m-d H:i:s',
+            ),
+        ]);
     }
 
     private function attachEventHandlers(): void
@@ -72,7 +94,10 @@ class Site extends BaseModule
             }
         );
 
-        // send an email with a link to the latest blog entry when a new blog post is published for the first time
+        // Email subscribers the first time a blog entry is saved in the "live"
+        // state — whether that's on first publish or when a previously
+        // disabled/draft entry is enabled later. The NotificationLog table
+        // guarantees an entry only ever triggers one round of emails.
         Event::on(
             Entry::class,
             Element::EVENT_AFTER_SAVE,
@@ -80,35 +105,58 @@ class Site extends BaseModule
                 /* @var Entry $entry */
                 $entry = $e->sender;
 
-                if (ElementHelper::isDraftOrRevision($entry)) {
-                    // We don’t care about these, so just skip it!
+                if (
+                    ElementHelper::isDraftOrRevision($entry)
+                    || $entry->propagating
+                    || $entry->resaving
+                    || $entry->section?->handle !== 'blog'
+                    || $entry->getStatus() !== Entry::STATUS_LIVE
+                ) {
                     return;
                 }
-                $isNew = $e->isNew;
-                // It's a new entry!
-                if ($isNew && $entry->section->handle === 'blog') {
-                    // It's a blog entry!
-                    // Send the email notification
-                    $module = Site::getInstance();
-                    try {
-                        $subscribers = Entry::find()
-                            ->section('subscribers')
-                            ->all();
-                        foreach ($subscribers as $subscriber) {
-                            /** @var Entry $subscriber */
-                            if (empty($subscriber->email)) {
-                                continue;
-                            }
-                            MailNotificationHelper::sendEmailNotification($subscriber->getFieldValue('email'), 'New Sumner Mission Story Published: ' . $entry->title,'site/_email/post-notification', [
-                                'entry' => $entry,
-                                'subscriberId' => $subscriber->id,
-                            ]);
-                        }
 
-                    } catch (InvalidConfigException|InvalidFieldException $ex) {
-                        Craft::error('Error sending email notification: ' . $ex->getMessage(), __METHOD__);
+                try {
+                    if (NotificationLog::wasSent($entry->id)) {
+                        return;
                     }
+
+                    Craft::info(
+                        "Blog entry {$entry->id} (\"{$entry->title}\") is live for the first time — notifying subscribers.",
+                        MailNotificationHelper::LOG_CATEGORY
+                    );
+
+                    MailNotificationHelper::notifySubscribersOfEntry($entry);
+                } catch (\Throwable $ex) {
+                    Craft::error('Error sending post notifications: ' . $ex->getMessage(), MailNotificationHelper::LOG_CATEGORY);
                 }
+            }
+        );
+
+        // Add a "send/re-send notification" panel to the blog entry sidebar in the CP
+        Event::on(
+            Entry::class,
+            Element::EVENT_DEFINE_SIDEBAR_HTML,
+            static function(DefineHtmlEvent $e) {
+                /* @var Entry $entry */
+                $entry = $e->sender;
+                $canonicalId = $entry->getCanonicalId();
+
+                if (
+                    $entry->getIsRevision()
+                    || $entry->section?->handle !== 'blog'
+                    || !$canonicalId
+                ) {
+                    return;
+                }
+
+                $e->html .= Craft::$app->getView()->renderTemplate(
+                    'site/_cp/notify-sidebar',
+                    [
+                        'entryId' => $canonicalId,
+                        'summary' => NotificationLog::summary($canonicalId),
+                    ],
+                    View::TEMPLATE_MODE_CP
+                );
             }
         );
 

@@ -1,0 +1,50 @@
+{# Subscriber-notification panel shown in the blog entry sidebar #}
+<fieldset id="subscriber-notifications">
+    <legend class="h6">Subscriber Notifications</legend>
+    <div class="meta read-only" style="margin-bottom: 8px;">
+        {% if summary %}
+            <div class="data">
+                <div class="field light">
+                    Last sent {{ summary.lastSent|date('M j, Y g:ia') }}<br>
+                    {{ summary.ok }} delivered{% if summary.failed %}, <span class="error">{{ summary.failed }} failed</span>{% endif %}
+                </div>
+            </div>
+        {% else %}
+            <div class="data">
+                <div class="field light">Not sent to subscribers yet.</div>
+            </div>
+        {% endif %}
+    </div>
+    <button type="button" id="resend-notification-btn" class="btn small">
+        {{ summary ? 'Re-send notification email' : 'Send notification email' }}
+    </button>
+</fieldset>
+
+{% js %}
+(function() {
+    const btn = document.getElementById('resend-notification-btn');
+    if (!btn) return;
+    btn.addEventListener('click', function() {
+        if (!confirm('Email this post to ALL subscribers right now?\n\nEveryone on the subscriber list will receive it immediately. This cannot be undone.')) {
+            return;
+        }
+        btn.classList.add('loading');
+        btn.disabled = true;
+        Craft.sendActionRequest('POST', 'site/notify/resend', { data: { entryId: {{ entryId }} } })
+            .then(function(response) {
+                if (response.data.success) {
+                    Craft.cp.displayNotice(response.data.message);
+                } else {
+                    Craft.cp.displayError(response.data.message);
+                }
+            })
+            .catch(function(error) {
+                Craft.cp.displayError((error.response && error.response.data && error.response.data.message) || 'Failed to send notifications.');
+            })
+            .finally(function() {
+                btn.classList.remove('loading');
+                btn.disabled = false;
+            });
+    });
+})();
+{% endjs %}

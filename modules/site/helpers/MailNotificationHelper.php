@@ -4,29 +4,70 @@ namespace modules\site\helpers;
 
 use Craft;
 use craft\elements\Entry;
-use craft\errors\InvalidFieldException;
 use craft\mail\Message;
 use craft\web\View;
-use yii\base\InvalidConfigException;
 
 class MailNotificationHelper {
+
+    /** Log category picked up by the dedicated blog-notifications log target. */
+    public const LOG_CATEGORY = 'blog-notifications';
+
     /**
-     * @throws InvalidConfigException
-     * @throws InvalidFieldException
+     * Sends the "new post" notification to every enabled subscriber and
+     * records each attempt in the notification log.
+     *
+     * @return array{sent: int, failed: int}
      */
-    public static function sendEmailNotification(string|array $to, string $subject, string $template, array $templateVariables = []): void
+    public static function notifySubscribersOfEntry(Entry $entry): array
     {
         $subscribers = Entry::find()
             ->section('subscribers')
             ->all();
-        $successes = 0;
-        $failures = 0;
+
+        $sent = 0;
+        $failed = 0;
+
         foreach ($subscribers as $subscriber) {
             /** @var Entry $subscriber */
             $email = $subscriber->getFieldValue('email');
             if (!$email) {
                 continue;
             }
+
+            $success = self::sendEmailNotification(
+                $email,
+                'New Sumner Mission Story Published: ' . $entry->title,
+                'site/_email/post-notification',
+                [
+                    'entry' => $entry,
+                    'subscriberId' => $subscriber->id,
+                ]
+            );
+
+            NotificationLog::record($entry->id, $email, $success);
+            $success ? $sent++ : $failed++;
+        }
+
+        Craft::info(
+            "Post notification for entry {$entry->id} (\"{$entry->title}\"): {$sent} sent, {$failed} failed.",
+            self::LOG_CATEGORY
+        );
+
+        return ['sent' => $sent, 'failed' => $failed];
+    }
+
+    /**
+     * Renders a template and sends it as a single email.
+     */
+    public static function sendEmailNotification(string|array $to, string $subject, string $template, array $templateVariables = []): bool
+    {
+        $toLabel = implode(', ', array_map(
+            static fn($k, $v) => is_string($k) ? $k : $v,
+            array_keys((array)$to),
+            (array)$to
+        ));
+
+        try {
             $message = new Message();
             $message->setTo($to);
             $message->setFrom([
@@ -39,17 +80,17 @@ class MailNotificationHelper {
             );
             $message->setHtmlBody($emailHtml);
             $success = Craft::$app->getMailer()->send($message);
-
-            // If unsuccessful, log error and bail
-            if (!$success) {
-                Craft::warning("Unable to send the email using Craft's native email handling.", __METHOD__);
-                Craft::error("Check your general email settings within Craft.",__METHOD__);
-                $successes++;
-            } else {
-                Craft::info('Email notification sent for subject: ' . $subject, __METHOD__);
-                $failures++;
-            }
+        } catch (\Throwable $e) {
+            Craft::error("Error sending \"$subject\" to $toLabel: " . $e->getMessage(), self::LOG_CATEGORY);
+            return false;
         }
-        Craft::info("Email notifications sent: $successes successful, $failures failed.", __METHOD__);
+
+        if ($success) {
+            Craft::info("Sent \"$subject\" to $toLabel", self::LOG_CATEGORY);
+        } else {
+            Craft::warning("Mailer failed to send \"$subject\" to $toLabel — check the email transport settings (Brevo API key).", self::LOG_CATEGORY);
+        }
+
+        return $success;
     }
 }
