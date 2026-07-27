@@ -1,31 +1,40 @@
 {% extends "_layouts/generic-page-layout.twig" %}
 
-{% block title %}{{ entry.title ~ ' - ' ~ siteName }}- {% endblock %}
-
 {% set featuredImage = entry.featuredImage.one() %}
 
+{% set seomate = {
+    meta: {
+        'og:type': 'article',
+        'article:published_time': entry.postDate|date('c'),
+        'article:modified_time': entry.dateUpdated|date('c'),
+    },
+} %}
+
 {% block jsonld %}
-    <script type="application/ld+json">
-        { "@context": "https://schema.org",
-            "@type": "BlogPosting",
-            "headline": "{{ entry.title }}",
-            "image": "{{ featuredImage.url ?? '' }}",
-            "genre": "religious service",
-            "keywords": "mission, service, help, people, lds, caribbean, virgin islands, espanola, st. thomas, st. john",
-            "wordcount": "1120",
-            "publisher": "Another Side of Heaven",
-            "url": "{{ entry.getUrl() }}",
-            "datePublished": "{{ entry.postDate|date('Y-m-d') }}",
-            "dateCreated": "{{ entry.postDate|date('Y-m-d') }}",
-            "dateModified": "{{ entry.dateUpdated|date('Y-m-d') }}",
-            "description": "{{ entry.summary }}",
-            "articleBody": "{{ entry.articleBody|raw }}",
-            "author": {
-                "@type": "Person",
-                "name": "John & Kristi Sumner"
-            }
-        }
-    </script>
+    {% set bodyText = entry.articleBody|striptags|trim %}
+    {% set jsonld = {
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        'headline': entry.title,
+        'description': entry.summary ?: bodyText|slice(0, 300),
+        'image': featuredImage ? [featuredImage.getUrl({ width: 1200, height: 630 })] : [],
+        'url': entry.url,
+        'mainEntityOfPage': { '@type': 'WebPage', '@id': entry.url },
+        'datePublished': entry.postDate|date('c'),
+        'dateModified': entry.dateUpdated|date('c'),
+        'wordCount': bodyText|split(' ')|length,
+        'keywords': entry.categories.all()|map(c => c.title)|join(', '),
+        'genre': 'religious service',
+        'author': {
+            '@type': 'Person',
+            'name': 'John & Kristi Sumner',
+        },
+        'publisher': {
+            '@type': 'Organization',
+            'name': seo.siteName ?? 'Another Side of Heaven',
+        },
+    } %}
+    <script type="application/ld+json">{{ jsonld|json_encode|raw }}</script>
 {% endblock %}
 
 {% block content %}

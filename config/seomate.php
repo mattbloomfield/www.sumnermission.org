@@ -23,7 +23,7 @@ return [
     ],
 
     'defaultMeta' => [
-        'title' => ['seo.pageTitle'],
+        'title' => ['seo.siteName'],
         'description' => ['seo.metaDescription'],
         'image' => ['seo.image'],
     ],
@@ -33,13 +33,22 @@ return [
     'fieldProfiles' => [
         'standard' => [
             'title' => ['title'],
-            'description' => [ 'summary', 'articleBody'],
-            'image' => ['featuredImage'],
+            'description' => ['summary', 'articleBody', 'seo.metaDescription'],
+            'image' => ['featuredImage', 'seo.image'],
         ],
     ],
 
     'additionalMeta' => [
         'og:type' => 'website',
+        'og:site_name' => '{{ seo.siteName }}',
+        'twitter:card' => 'summary_large_image',
+    ],
+
+    // Same as SEOMate's default, plus article:* rendered as Open Graph property tags
+    'tagTemplateMap' => [
+        'default' => '<meta name="{{ key }}" content="{{ value }}">',
+        'title' => '<title>{{ value }}</title>',
+        '/^og:/,/^fb:/,/^article:/' => '<meta property="{{ key }}" content="{{ value }}">',
     ],
 
 ];
