@@ -7,7 +7,7 @@
             {% set image = chunk.entry.image.one() %}
             {% include "_components/blocks/image/image.twig" with {
                 image: image,
-                caption: image.caption,
+                caption: chunk.entry.caption ?: (image ? image.caption),
                 size: 'large',
                 alignment: 'center'
             } only %}

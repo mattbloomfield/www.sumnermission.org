@@ -24,41 +24,34 @@ fieldLayouts:
             userCondition: null
             warning: null
             width: 100
-          -
-            autocapitalize: true
-            autocomplete: false
-            autocorrect: true
-            class: null
-            dateAdded: '2025-08-07T18:47:23+00:00'
-            disabled: false
-            elementCondition: null
-            id: null
-            includeInCards: false
-            inputType: null
-            instructions: null
-            label: Caption
-            max: null
-            min: null
-            name: null
-            orientation: null
-            placeholder: null
-            providesThumbs: false
-            readonly: false
-            required: true
-            size: null
-            step: null
-            tip: null
-            title: null
-            type: craft\fieldlayoutelements\entries\EntryTitleField
-            uid: 0ffbbbb3-8003-43ec-ba9f-15fc613432f6
-            userCondition: null
-            warning: null
-            width: 100
         name: Content
         uid: e327c67c-c152-4e0c-b719-241214c2c37c
         userCondition: null
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: '2026-07-26T20:15:00+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: 3e18e51e-c692-4a4c-86b7-8cb0277cfed7 # Text
+            handle: caption
+            includeInCards: true
+            instructions: 'Optional. The image''s own caption is used automatically — only fill this in if you want a different caption for this article.'
+            label: 'Caption Override'
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: bdab4fa9-e117-423e-bae4-578d14e041ba
+            userCondition: null
+            warning: null
+            width: 100
+        name: Overrides
+        uid: b91a1117-8e24-42da-9286-70dc69b2a0a7
+        userCondition: null
 handle: image
-hasTitleField: true
+hasTitleField: false
 icon: file-image
 name: Image
 showSlugField: true
