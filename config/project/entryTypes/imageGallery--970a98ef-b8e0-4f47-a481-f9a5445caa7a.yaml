@@ -13,7 +13,7 @@ fieldLayouts:
             elementCondition: null
             fieldUid: 6686249d-c925-4721-bf51-ed5fc9c5e5fb # Images
             handle: null
-            includeInCards: false
+            includeInCards: true
             instructions: null
             label: null
             providesThumbs: false

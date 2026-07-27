@@ -60,7 +60,7 @@ fieldLayouts:
             elementCondition: null
             fieldUid: e51e3b2f-b475-4972-8b4b-6dfcf1c8cc0c # Link (All)
             handle: btnPrimary
-            includeInCards: false
+            includeInCards: true
             instructions: null
             label: 'Primary Button'
             providesThumbs: false

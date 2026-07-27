@@ -13,7 +13,7 @@ fieldLayouts:
             elementCondition: null
             fieldUid: 3e18e51e-c692-4a4c-86b7-8cb0277cfed7 # Text
             handle: quote
-            includeInCards: false
+            includeInCards: true
             instructions: null
             label: Quote
             providesThumbs: false
@@ -30,7 +30,7 @@ fieldLayouts:
             elementCondition: null
             fieldUid: 3e18e51e-c692-4a4c-86b7-8cb0277cfed7 # Text
             handle: attribution
-            includeInCards: false
+            includeInCards: true
             instructions: null
             label: Attribution
             providesThumbs: false
