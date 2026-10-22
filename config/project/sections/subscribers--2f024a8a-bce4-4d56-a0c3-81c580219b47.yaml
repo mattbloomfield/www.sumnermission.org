@@ -5,6 +5,7 @@ entryTypes:
     uid: 5b9bc5e7-3452-4e17-86ef-9981a3c885b2 # Subscriber
 handle: subscribers
 maxAuthors: 1
+minAuthors: 1
 name: Subscribers
 propagationMethod: all
 siteSettings:

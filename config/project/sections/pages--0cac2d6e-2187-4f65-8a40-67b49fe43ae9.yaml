@@ -5,19 +5,13 @@ entryTypes:
     uid: c66db33d-32d0-4de9-b66f-7ca99a02814f # Page
 handle: pages
 maxAuthors: 1
+minAuthors: 1
 name: Pages
 previewTargets:
   -
-    __assoc__:
-      -
-        - label
-        - 'Primary entry page'
-      -
-        - urlFormat
-        - '{url}'
-      -
-        - refresh
-        - '1'
+    label: 'Primary entry page'
+    refresh: '1'
+    urlFormat: '{url}'
 propagationMethod: all
 siteSettings:
   c7e96329-677b-46f3-b962-ea2f6434fb74: # Another Side of Heaven

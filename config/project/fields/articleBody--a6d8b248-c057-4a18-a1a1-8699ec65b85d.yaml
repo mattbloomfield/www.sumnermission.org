@@ -7,32 +7,33 @@ settings:
   availableTransforms: ''
   availableVolumes: '*'
   characterLimit: null
-  ckeConfig: b582f59b-66d7-4ba3-8fd7-8c744ded6cde # Simple
-  createButtonLabel: null
+  css: null
+  cssFile: null
   defaultTransform: 5a7e61d8-fa87-440e-874d-23c9b2f6f7c6 # Medium
   entryTypes:
     -
-      __assoc__:
-        -
-          - uid
-          - 0386d14a-7549-4cf1-964d-a686127a35f3 # Image
+      expanded: true
+      uid: 0386d14a-7549-4cf1-964d-a686127a35f3 # Image
     -
-      __assoc__:
-        -
-          - uid
-          - 970a98ef-b8e0-4f47-a481-f9a5445caa7a # Image Gallery
+      expanded: true
+      uid: 970a98ef-b8e0-4f47-a481-f9a5445caa7a # Image Gallery
     -
-      __assoc__:
-        -
-          - uid
-          - 9deb1b78-d848-4c9a-a26e-ea8416d17c99 # Pull Quote
+      expanded: true
+      uid: 9deb1b78-d848-4c9a-a26e-ea8416d17c99 # Pull Quote
     -
-      __assoc__:
-        -
-          - uid
-          - c384dd72-dc07-48ae-8215-67ff80858924 # Call to Action
-  expandEntryButtons: true
+      expanded: true
+      uid: c384dd72-dc07-48ae-8215-67ff80858924 # Call to Action
   fullGraphqlData: true
+  headingLevels:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+  js: null
+  jsFile: null
+  options: null
   parseEmbeds: false
   purifierConfig: null
   purifyHtml: true
@@ -41,6 +42,15 @@ settings:
   showWordCount: false
   sourceEditingGroups:
     - __ADMINS__
+  toolbar:
+    - heading
+    - '|'
+    - bulletedList
+    - numberedList
+    - bold
+    - italic
+    - link
+    - createEntry
   wordLimit: null
 translationKeyFormat: null
 translationMethod: none

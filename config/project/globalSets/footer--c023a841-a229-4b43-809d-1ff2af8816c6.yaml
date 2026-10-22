@@ -11,10 +11,8 @@ fieldLayouts:
             elementCondition: null
             fieldUid: 3e18e51e-c692-4a4c-86b7-8cb0277cfed7 # Text
             handle: null
-            includeInCards: false
             instructions: null
             label: 'Footer Text'
-            providesThumbs: false
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
@@ -28,10 +26,8 @@ fieldLayouts:
             elementCondition: null
             fieldUid: 3e18e51e-c692-4a4c-86b7-8cb0277cfed7 # Text
             handle: copyright
-            includeInCards: false
             instructions: null
             label: Copyright
-            providesThumbs: false
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField

@@ -13,10 +13,8 @@ fieldLayouts:
             elementCondition: null
             fieldUid: 3e18e51e-c692-4a4c-86b7-8cb0277cfed7 # Text
             handle: firstName
-            includeInCards: false
             instructions: null
             label: 'First Name'
-            providesThumbs: false
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
@@ -30,10 +28,8 @@ fieldLayouts:
             elementCondition: null
             fieldUid: 3e18e51e-c692-4a4c-86b7-8cb0277cfed7 # Text
             handle: lastName
-            includeInCards: false
             instructions: null
             label: 'Last Name'
-            providesThumbs: false
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
@@ -47,10 +43,8 @@ fieldLayouts:
             elementCondition: null
             fieldUid: d60bf066-159d-4fbe-8469-d16431848e03 # Email
             handle: null
-            includeInCards: false
             instructions: null
             label: null
-            providesThumbs: false
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField

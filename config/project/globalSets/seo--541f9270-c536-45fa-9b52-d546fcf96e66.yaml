@@ -11,10 +11,8 @@ fieldLayouts:
             elementCondition: null
             fieldUid: 3e18e51e-c692-4a4c-86b7-8cb0277cfed7 # Text
             handle: siteName
-            includeInCards: false
             instructions: null
             label: 'Site Name'
-            providesThumbs: false
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
@@ -28,10 +26,8 @@ fieldLayouts:
             elementCondition: null
             fieldUid: 614a0f80-17f1-41dd-bb25-adee56cc18e4 # Summary
             handle: metaDescription
-            includeInCards: false
             instructions: null
             label: Description
-            providesThumbs: false
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
@@ -45,10 +41,8 @@ fieldLayouts:
             elementCondition: null
             fieldUid: 41218836-6831-49f3-9a90-01aff59d5439 # Image
             handle: null
-            includeInCards: false
             instructions: null
             label: null
-            providesThumbs: false
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField

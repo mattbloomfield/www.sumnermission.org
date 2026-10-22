@@ -16,7 +16,6 @@ fieldLayouts:
             disabled: false
             elementCondition: null
             id: null
-            includeInCards: false
             inputType: null
             instructions: null
             label: null
@@ -25,7 +24,6 @@ fieldLayouts:
             name: null
             orientation: null
             placeholder: null
-            providesThumbs: false
             readonly: false
             required: true
             size: null
@@ -43,10 +41,8 @@ fieldLayouts:
             elementCondition: null
             fieldUid: 614a0f80-17f1-41dd-bb25-adee56cc18e4 # Summary
             handle: null
-            includeInCards: false
-            instructions: 'A short teaser — just 1–2 sentences shown on the blog page and in the email to subscribers. **Don''t write the article here!** The full story goes in the Article Body below.'
+            instructions: "A short teaser — just 1–2 sentences shown on the blog page and in the email to subscribers. **Don't write the article here!** The full story goes in the Article Body below."
             label: null
-            providesThumbs: false
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
@@ -60,10 +56,8 @@ fieldLayouts:
             elementCondition: null
             fieldUid: 41218836-6831-49f3-9a90-01aff59d5439 # Image
             handle: featuredImage
-            includeInCards: false
             instructions: '**Just one photo** — the cover image for this post on the blog page and in the email. Put all the rest of your photos inside the Article Body below, using Image or Image Gallery blocks.'
             label: 'Featured Image'
-            providesThumbs: false
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
@@ -77,10 +71,8 @@ fieldLayouts:
             elementCondition: null
             fieldUid: a6d8b248-c057-4a18-a1a1-8699ec65b85d # Article Body
             handle: null
-            includeInCards: false
             instructions: 'The full story goes here — all your writing and all your photos. Use the **+ button** in the toolbar to add Image, Image Gallery, Pull Quote, and Call to Action blocks anywhere in the article.'
             label: null
-            providesThumbs: false
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
@@ -94,10 +86,8 @@ fieldLayouts:
             elementCondition: null
             fieldUid: 39ecbec2-b128-4c74-8dbc-3fc74dd35bb2 # Categories
             handle: null
-            includeInCards: false
             instructions: null
             label: null
-            providesThumbs: false
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField

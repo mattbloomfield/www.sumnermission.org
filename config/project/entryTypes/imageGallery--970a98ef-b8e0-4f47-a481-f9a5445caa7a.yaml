@@ -3,6 +3,8 @@ description: null
 fieldLayouts:
   78f6c699-673f-4432-a421-a56610b6ec2c:
     cardThumbAlignment: end
+    cardView:
+      - 'layoutElement:628ca5d9-2073-4a98-8bab-a6f9d05a7fc9'
     tabs:
       -
         elementCondition: null
@@ -13,10 +15,8 @@ fieldLayouts:
             elementCondition: null
             fieldUid: 6686249d-c925-4721-bf51-ed5fc9c5e5fb # Images
             handle: null
-            includeInCards: true
             instructions: null
             label: null
-            providesThumbs: false
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField

@@ -11,10 +11,8 @@ fieldLayouts:
             elementCondition: null
             fieldUid: 3e18e51e-c692-4a4c-86b7-8cb0277cfed7 # Text
             handle: tag
-            includeInCards: false
             instructions: null
             label: Tagline
-            providesThumbs: false
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField

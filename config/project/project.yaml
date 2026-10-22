@@ -1,4 +1,4 @@
-dateModified: 1785122575
+dateModified: 1792696932
 elementSources:
   craft\elements\Asset:
     -
@@ -157,7 +157,6 @@ meta:
     ac73f4a2-97c5-4432-b1aa-ba7ac8c9c572: 'Home Page' # Home Page
     ae562093-5d8c-49ed-8e0b-92254b62ba7b: Small # Small
     b4e28d0b-ce5e-4141-931a-ee0bf704617d: 'Title Text' # Title Text
-    b582f59b-66d7-4ba3-8fd7-8c744ded6cde: Simple # Simple
     bbe4b43a-1686-4439-b500-7215f1d4acf1: 'Blog Listing' # Blog Listing
     c023a841-a229-4b43-809d-1ff2af8816c6: Footer # Footer
     c7e96329-677b-46f3-b962-ea2f6434fb74: 'Another Side of Heaven' # Another Side of Heaven
@@ -174,7 +173,7 @@ plugins:
   ckeditor:
     edition: standard
     enabled: true
-    schemaVersion: 3.0.0.0
+    schemaVersion: 5.6.0.0
   convergine-brevo:
     edition: standard
     enabled: true
@@ -188,7 +187,7 @@ system:
   live: true
   name: 'Another Side of Heaven'
   retryDuration: null
-  schemaVersion: 5.8.0.3
+  schemaVersion: 5.11.0.2
   timeZone: America/Los_Angeles
 users:
   allowPublicRegistration: false
