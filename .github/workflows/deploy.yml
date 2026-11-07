@@ -20,6 +20,9 @@ jobs:
             cd /var/www/sumnermission.org
             git pull origin main
             composer install --no-dev --no-interaction --optimize-autoloader
+            # One-time recovery: the previous failed migration created its schema
+            # before MySQL restored Craft's migration-history table.
+            php craft migrate/mark m261014_000000_field_tips_and_warnings --track=craft --interactive=0
             php craft migrate/all --interactive=0
             php craft project-config/apply --force
             php craft clear-caches/all
